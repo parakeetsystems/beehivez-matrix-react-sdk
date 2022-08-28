@@ -35,6 +35,7 @@ import AccessibleButton from '../../views/elements/AccessibleButton';
 import AuthBody from "../../views/auth/AuthBody";
 import AuthHeader from "../../views/auth/AuthHeader";
 import InteractiveAuth, { InteractiveAuthCallback } from "../InteractiveAuth";
+import SdkConfig from '../../../SdkConfig';
 import Spinner from "../../views/elements/Spinner";
 import { AuthHeaderDisplay } from './header/AuthHeaderDisplay';
 import { AuthHeaderProvider } from './header/AuthHeaderProvider';
@@ -557,6 +558,8 @@ export default class Registration extends React.Component<IProps, IState> {
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
+        const hideServerPicker = SdkConfig.get("hide_auth_server_selector");
+
 
         let serverDeadSection;
         if (!this.state.serverIsAlive) {
@@ -639,7 +642,19 @@ export default class Registration extends React.Component<IProps, IState> {
         } else {
             body = <Fragment>
                 <div className="mx_Register_mainContent">
-                    { this.renderRegisterComponent() }
+                <AuthHeaderDisplay
+                    title={_t('Create account')}
+                    serverPicker={<ServerPicker
+                        title={_t("Host account on")}
+                        dialogTitle={_t("Decide where your account is hosted")}
+                        serverConfig={this.props.serverConfig}
+                        onServerConfigChange={this.state.doingUIAuth ? undefined : this.props.onServerConfigChange}
+                    />}
+                >
+                    { errorText }
+                    { serverDeadSection }
+                </AuthHeaderDisplay>
+                { this.renderRegisterComponent() }
                 </div>
                 <div className="mx_Register_footerActions">
                     { goBack }
