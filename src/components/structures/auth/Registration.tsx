@@ -558,7 +558,7 @@ export default class Registration extends React.Component<IProps, IState> {
         if (err) {
             errorText = <div className="mx_Login_error">{ err }</div>;
         }
-        const hideServerPicker = SdkConfig.get("hide_auth_server_selector");
+        const hideServerPicker = SdkConfig.get("disable_homeserver_selection");
 
 
         let serverDeadSection;

@@ -27,7 +27,7 @@ interface Props {
 }
 
 export function AuthHeaderDisplay({ title, icon, serverPicker, children }: PropsWithChildren<Props>) {
-    const hideServerPicker = SdkConfig.get("hide_auth_server_selector");
+    const hideServerPicker = SdkConfig.get("disable_homeserver_selection");
     const context = useContext(AuthHeaderContext);
     if (!context) {
         return null;

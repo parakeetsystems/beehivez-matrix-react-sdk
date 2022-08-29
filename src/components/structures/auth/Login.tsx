@@ -546,7 +546,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     render() {
         const loader = this.isBusy() && !this.state.busyLoggingIn ?
             <div className="mx_Login_loader"><Spinner /></div> : null;
-        const hideServerPicker = SdkConfig.get("hide_auth_server_selector");
+        const hideServerPicker = SdkConfig.get("disable_homeserver_selection");
         const errorText = this.state.errorText;
 
         let errorTextSection;

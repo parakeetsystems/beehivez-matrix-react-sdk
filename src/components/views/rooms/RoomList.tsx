@@ -21,6 +21,7 @@ import React, { ComponentType, createRef, ReactComponentElement, RefObject } fro
 
 import { IState as IRovingTabIndexState, RovingTabIndexProvider } from "../../../accessibility/RovingTabIndex";
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import SdkConfig from "../../../SdkConfig";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { Action } from "../../../dispatcher/actions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -200,6 +201,7 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
     });
 
     const showCreateRoom = shouldShowComponent(UIComponent.CreateRooms);
+    const disableServerSelection = SdkConfig.get("disable_homeserver_selection");
 
     let contextMenuContent: JSX.Element;
     if (menuDisplayed && activeSpace) {
@@ -305,17 +307,20 @@ const UntaggedAuxButton = ({ tabIndex }: IAuxButtonProps) => {
                     </IconizedContextMenuOption>
                 ) }
             </> }
-            <IconizedContextMenuOption
-                label={_t("Explore public rooms")}
-                iconClassName="mx_RoomList_iconExplore"
-                onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    closeMenu();
-                    PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", e);
-                    defaultDispatcher.fire(Action.ViewRoomDirectory);
-                }}
-            />
+            {
+                !!!disableServerSelection &&
+                <IconizedContextMenuOption
+                    label={_t("Explore public rooms")}
+                    iconClassName="mx_RoomList_iconExplore"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        closeMenu();
+                        PosthogTrackers.trackInteraction("WebRoomListRoomsSublistPlusMenuExploreRoomsItem", e);
+                        defaultDispatcher.fire(Action.ViewRoomDirectory);
+                    }}
+                />
+            }
         </IconizedContextMenuOptionList>;
     }
 
