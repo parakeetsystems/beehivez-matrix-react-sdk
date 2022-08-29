@@ -17,6 +17,8 @@ limitations under the License.
 import React, { Fragment, PropsWithChildren, ReactNode, useContext } from "react";
 
 import { AuthHeaderContext } from "./AuthHeaderContext";
+import SdkConfig from '../../../../SdkConfig';
+
 
 interface Props {
     title: ReactNode;
@@ -25,6 +27,7 @@ interface Props {
 }
 
 export function AuthHeaderDisplay({ title, icon, serverPicker, children }: PropsWithChildren<Props>) {
+    const hideServerPicker = SdkConfig.get("disable_homeserver_selection");
     const context = useContext(AuthHeaderContext);
     if (!context) {
         return null;
@@ -35,7 +38,7 @@ export function AuthHeaderDisplay({ title, icon, serverPicker, children }: Props
             { current?.icon ?? icon }
             <h1>{ current?.title ?? title }</h1>
             { children }
-            { current?.hideServerPicker !== true && serverPicker }
+            { current?.hideServerPicker !== true && !!!hideServerPicker && serverPicker }
         </Fragment>
     );
 }

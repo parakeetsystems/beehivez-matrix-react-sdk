@@ -92,6 +92,7 @@ const UserWelcomeTop = () => {
 const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
     const config = SdkConfig.get();
     const pageUrl = getHomePageUrl(config);
+    const disableServerSelection = SdkConfig.get("disable_homeserver_selection");
 
     if (pageUrl) {
         return <EmbeddedPage className="mx_HomePage" url={pageUrl} scrollbar={true} />;
@@ -102,7 +103,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
         introSection = <UserWelcomeTop />;
     } else {
         const brandingConfig = SdkConfig.getObject("branding");
-        const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/element-logo.svg";
+        const logoUrl = brandingConfig?.get("auth_header_logo_url") ?? "themes/element/img/logos/BeeHivezLogo.svg";
 
         introSection = <React.Fragment>
             <img src={logoUrl} alt={config.brand} />
@@ -118,9 +119,12 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
                 <AccessibleButton onClick={onClickSendDm} className="mx_HomePage_button_sendDm">
                     { _tDom("Send a Direct Message") }
                 </AccessibleButton>
-                <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
-                    { _tDom("Explore Public Rooms") }
-                </AccessibleButton>
+                {
+                    !!!disableServerSelection &&
+                    <AccessibleButton onClick={onClickExplore} className="mx_HomePage_button_explore">
+                        { _tDom("Explore Public Rooms") }
+                    </AccessibleButton>
+                }
                 <AccessibleButton onClick={onClickNewRoom} className="mx_HomePage_button_createGroup">
                     { _tDom("Create a Group Chat") }
                 </AccessibleButton>

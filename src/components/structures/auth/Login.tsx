@@ -546,7 +546,7 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
     render() {
         const loader = this.isBusy() && !this.state.busyLoggingIn ?
             <div className="mx_Login_loader"><Spinner /></div> : null;
-
+        const hideServerPicker = SdkConfig.get("disable_homeserver_selection");
         const errorText = this.state.errorText;
 
         let errorTextSection;
@@ -606,10 +606,13 @@ export default class LoginComponent extends React.PureComponent<IProps, IState> 
                     </h1>
                     { errorTextSection }
                     { serverDeadSection }
-                    <ServerPicker
-                        serverConfig={this.props.serverConfig}
-                        onServerConfigChange={this.props.onServerConfigChange}
-                    />
+                    {
+                        !!!hideServerPicker &&
+                        <ServerPicker
+                            serverConfig={this.props.serverConfig}
+                            onServerConfigChange={this.props.onServerConfigChange}
+                        />
+                    }
                     { this.renderLoginComponentForFlows() }
                     { footer }
                 </AuthBody>

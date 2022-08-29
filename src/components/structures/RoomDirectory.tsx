@@ -178,6 +178,19 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
         // too. If it's changed, appending to the list will corrupt it.
         const nextBatch = this.nextBatch;
         const opts: IRoomDirectoryOptions = { limit: 20 };
+
+        // split on first ":" occurance
+        const [_, ...possibleSelectedServer] = filterString?.split(":");
+        // Join the rest of ":" split to make server name e.g. localhost:8481
+        const selectedServer = possibleSelectedServer?.join(":");
+
+        if (selectedServer && selectedServer?.toLowerCase() != roomServer?.toLowerCase()) {
+            this.setState({
+                loading: false,
+            });
+            return false;
+        }
+
         if (roomServer != MatrixClientPeg.getHomeserverName()) {
             opts.server = roomServer;
         }
@@ -406,6 +419,7 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
     };
 
     public render() {
+        const disableServerSelection = SdkConfig.get("disable_homeserver_selection")
         let content;
         if (this.state.error) {
             content = this.state.error;
@@ -516,11 +530,14 @@ export default class RoomDirectory extends React.Component<IProps, IState> {
                     showJoinButton={showJoinButton}
                     initialText={this.props.initialText}
                 />
-                <NetworkDropdown
-                    protocols={this.protocols}
-                    config={this.state.serverConfig}
-                    setConfig={this.onOptionChange}
-                />
+                {
+                    !!!disableServerSelection &&
+                    <NetworkDropdown
+                        protocols={this.protocols}
+                        config={this.state.serverConfig}
+                        setConfig={this.onOptionChange}
+                    />
+                }
             </div>;
         }
         const explanation =

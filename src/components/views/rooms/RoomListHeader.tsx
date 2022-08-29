@@ -20,6 +20,7 @@ import { Room, RoomEvent } from "matrix-js-sdk/src/models/room";
 import React, { useContext, useEffect, useState } from "react";
 
 import MatrixClientContext from "../../../contexts/MatrixClientContext";
+import SdkConfig from "../../../SdkConfig";
 import { shouldShowComponent } from "../../../customisations/helpers/UIComponents";
 import { Action } from "../../../dispatcher/actions";
 import defaultDispatcher from "../../../dispatcher/dispatcher";
@@ -146,7 +147,8 @@ const RoomListHeader = ({ onVisibilityChange }: IProps) => {
         }
     }, [onVisibilityChange]);
 
-    const canExploreRooms = shouldShowComponent(UIComponent.ExploreRooms);
+    const disableServerSelection = SdkConfig.get("disable_homeserver_selection");
+    const canExploreRooms = !!!disableServerSelection && shouldShowComponent(UIComponent.ExploreRooms);
     const canCreateRooms = shouldShowComponent(UIComponent.CreateRooms);
     const canCreateSpaces = shouldShowComponent(UIComponent.CreateSpaces);
 
