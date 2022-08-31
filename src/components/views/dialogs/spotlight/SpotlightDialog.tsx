@@ -517,6 +517,8 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
         onFinished();
     };
 
+    const disableServerSelection = SdkConfig.get("disable_homeserver_selection");
+
     let otherSearchesSection: JSX.Element;
     if (trimmedQuery || filter !== Filter.PublicRooms) {
         otherSearchesSection = (
@@ -530,7 +532,7 @@ const SpotlightDialog: React.FC<IProps> = ({ initialText = "", initialFilter = n
                         : _t("Search for") }
                 </h4>
                 <div>
-                    { (filter !== Filter.PublicRooms) && (
+                    { (!!!disableServerSelection && filter !== Filter.PublicRooms) && (
                         <Option
                             id="mx_SpotlightDialog_button_explorePublicRooms"
                             className="mx_SpotlightDialog_explorePublicRooms"

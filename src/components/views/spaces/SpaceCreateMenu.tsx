@@ -262,6 +262,7 @@ const SpaceCreateMenu = ({ onFinished }) => {
     };
 
     let body;
+    const disableServerSelection = SdkConfig.get("disable_homeserver_selection");
     if (visibility === null) {
         body = <React.Fragment>
             <h2>{ _t("Create a space") }</h2>
@@ -269,13 +270,15 @@ const SpaceCreateMenu = ({ onFinished }) => {
                 { _t("Spaces are a new way to group rooms and people. What kind of Space do you want to create? " +
                   "You can change this later.") }
             </p>
-
-            <SpaceCreateMenuType
-                title={_t("Public")}
-                description={_t("Open space for anyone, best for communities")}
-                className="mx_SpaceCreateMenuType_public"
-                onClick={() => setVisibility(Visibility.Public)}
-            />
+            {
+                !!!disableServerSelection &&
+                <SpaceCreateMenuType
+                    title={_t("Public")}
+                    description={_t("Open space for anyone, best for communities")}
+                    className="mx_SpaceCreateMenuType_public"
+                    onClick={() => setVisibility(Visibility.Public)}
+                />
+            }
             <SpaceCreateMenuType
                 title={_t("Private")}
                 description={_t("Invite only, best for yourself or teams")}

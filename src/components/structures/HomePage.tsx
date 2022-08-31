@@ -100,6 +100,7 @@ const HomePage: React.FC<IProps> = ({ justRegistered = false }) => {
 
     let introSection: JSX.Element;
     if (justRegistered || !OwnProfileStore.instance.getHttpAvatarUrl(AVATAR_SIZE)) {
+    // if (false) {
         introSection = <UserWelcomeTop />;
     } else {
         const brandingConfig = SdkConfig.getObject("branding");

@@ -39,6 +39,7 @@ interface Props {
 // For now, that means we set the cutoff at 2022-07-01 00:00 UTC
 const USER_ONBOARDING_CUTOFF_DATE = new Date(1_656_633_600);
 export function showUserOnboardingPage(useCase: UseCase): boolean {
+    // return false;
     return useCase !== null || MatrixClientPeg.userRegisteredAfter(USER_ONBOARDING_CUTOFF_DATE);
 }
 
